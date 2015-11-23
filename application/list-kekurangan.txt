@@ -1,0 +1,2 @@
+->Error Handling : Kalau gagal update, delete atau apapun karena reference key
+ atau apapun jangan lupa untuk minimal menampilkan pesan error..
