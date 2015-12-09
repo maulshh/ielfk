@@ -1,6 +1,8 @@
-var color_string = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, "a", "b", "c", "d", "e", "f"],
+var sovogcount = 0;
+var container = $("#sovogs"),
+    looking_options = [(Math.random() * 1.6) + "em", (-(Math.random() * 6) + "em")],
     speeds = ["x-slow", "slow", "normal", "fast", "x-fast"],
-    container = $("#sovogs");
+    color_string = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, "a", "b", "c", "d", "e", "f"];
 var createColor = function (range) {
     var color = "#";
     for (var i = 0; i < 6; i++) {
@@ -35,26 +37,16 @@ var randomColor = function () {
 var attrs = ["meaty", "spikes", "skinny", "short", "tall", "shifty-eyes", "jumping"],
     rare_attrs = ["flex", "sitting", "shifty", "bouncy", "blink", "sad", "dopey", "happy", "angry", "shifting", "closed-mouth", "little", "big"],
     super_rare_attrs = ["giant", "tiny", "wide-open-mouth"];
-
-var sovogcount = 0;
 // global var
 
 //--object sovog--
 var makeSovog = function (data) {
-    sovogcount++;
-    if (typeof data == 'undefined') {
-        data = {
-            name: false,
-            body: false,
-            arm: false,
-            eye: false,
-            attr: false,
-            speed: false
-        }
+    if(!data){
+        data = {};
     }
+    sovogcount++;
     if (data.attr) {
         this.which_attrs = data.attr;
-        alert(this.which_attrs.length);
     } else {
         this.which_attrs = [];
         for (var i = 0, len = attrs.length; i < len; i++) {
@@ -73,14 +65,17 @@ var makeSovog = function (data) {
             }
         }
     }
-    var looking_options = [(Math.random() * 1.6) + "em", (-(Math.random() * 6) + "em")];
     this.looking = looking_options[Math.floor(Math.random() * 2)];
-    this.speed = speeds[data.speed?data.speed:Math.floor(Math.random() * speeds.length)];
+    this.speed = speeds[data.speed?data.speed-1:Math.floor(Math.random() * speeds.length)];
     this.light_color = data.arm?data.arm:randomColor();
     this.dark_color = data.body?data.body:randomColor();
     this.eye_color = data.eye?data.eye:randomColor();
     this.sovogname = data.name?data.name:"sovog"+sovogcount;
-    this.border_color = "#eaeaea";
+    this.click = data.click;
+
+    var element = '<div class="wrapper" id="'+ this.sovogname+'">' +
+        '</div>';
+    container.append(element);
 
     this.getElement = function(){
         var elem = '<div class="sovog';
@@ -89,7 +84,7 @@ var makeSovog = function (data) {
                 elem += (' ' + this.which_attrs[i]);
             }
         }
-        elem += " " + this.speed
+        elem += " " + this.speed;
         elem += '">' +
             '<div class="head">' +
             '<div class="top">' +
@@ -146,10 +141,6 @@ var makeSovog = function (data) {
         return elem;
     };
 
-    var element = '<div class="wrapper" id="'+ this.sovogname+'">' +
-        '</div>';
-    container.append(element);
-
     this.sovog = $('#'+this.sovogname);
 
     this.updateSovog = function(){
@@ -167,6 +158,11 @@ var makeSovog = function (data) {
         this.which_attrs = atr;
         this.updateSovog();
     }
+
+    this.sovog.click(function(){
+        //data.click();
+        this.click();
+    })
 }
 //--object sovog--
 
@@ -195,15 +191,15 @@ var boro = new makeSovog({
     arm: '#787878' ,
     eye: '#000000',
     attr: ["sad", "giant", "jumping"],
-    speed: 0
+    speed: 1,
+    click: function(){
+        makeSovog();
+    }
 });
 
 $(document).ready(function(){
     $("#make-sovog").click(function () {
-        makeSovog({});
-    });
-    boro.sovog.click(function(){
-        boro.changeSpeed(4);
+        makeSovog();
     });
 });
 //makeSovog('');

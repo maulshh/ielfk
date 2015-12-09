@@ -1,0 +1,95 @@
+#top, .navbar-default{
+	background-color:#393d44;
+	color: #cdcdcd;
+}
+
+.navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus{
+	color :white;
+}
+
+.navbar-default .navbar-nav > li > a{
+	color:#cdcdcd;
+}
+
+#semi-top{
+	background-color:#454a52;
+	min-height: 150px;
+}
+
+.brand-name{
+	margin-top: 2%;
+	color: #f4f4f4;
+	font-weight: 1000;
+	font-family: 'Lato', "Helvetica Neue", Helvetica, Arial, Sans-Serif;
+}
+
+body{
+	background-color: #e5e5e5;
+}
+
+.video-box{
+	background-color: white;
+	margin-top: 4%;
+	position: relative;
+  	border-radius: 3px;
+  	background: #ffffff;
+  	margin-bottom: 20px;
+  	width: 100%;
+  	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.pad {
+  padding: 15px;
+}
+
+.video-right {
+    float: right;
+    width: 450px;
+}
+
+.video-tittle{
+	color : #222;
+	font: 24px Roboto,arial,sans-serif;
+}
+
+.video-description{
+	color : #222;
+	margin-top : 10px;
+	font: Roboto,arial,sans-serif;
+}
+
+.video-header{
+	color :#222;
+	background-color: #ffffff;
+}
+
+.video-recom{
+	color :#222;
+	background-color: #ffffff;
+	min-width: 300px;
+}
+
+.video{
+	background-color: #ffffff;
+}
+
+#bot{
+	margin-top: 4%;
+	background-color:#454a52;
+	color: #cdcdcd;
+}
+
+.isi{
+	margin-top: 2%;
+	min-height: 200px;
+}
+
+#deep-bot{
+	background-color:#393d44;
+	color: #cdcdcd;
+}
+
+.video-footer{
+	margin-bottom: 0;
+	padding-top: 25%;
+}

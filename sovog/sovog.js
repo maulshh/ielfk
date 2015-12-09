@@ -1,4 +1,42 @@
 var sovogcount = 0;
+var container = $("#sovogs"),
+    looking_options = [(Math.random() * 1.6) + "em", (-(Math.random() * 6) + "em")],
+    speeds = ["x-slow", "slow", "normal", "fast", "x-fast"],
+    color_string = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, "a", "b", "c", "d", "e", "f"];
+var createColor = function (range) {
+    var color = "#";
+    for (var i = 0; i < 6; i++) {
+        if (range) {
+            switch (range) {
+                case "light":
+                    color += color_string[(Math.floor(Math.random() * 6)) + 10];
+                    break;
+                case "light":
+                    color += color_string[(Math.floor(Math.random() * 6)) + 5];
+                    break;
+                case "dark":
+                    color += color_string[Math.floor(Math.random() * 6)];
+                    break;
+                default:
+                    color += color_string[Math.floor(Math.random() * 16)];
+                    break;
+            }
+        }
+        else {
+            color += color_string[Math.floor(Math.random() * 16)];
+        }
+    }
+    return color;
+};
+
+var randomColor = function () {
+    var colors = ["FFD230", "FFBF52", "EDCC82", "DCD8B2", "DCCDBC", "88B2AE", "5F8B9C", "4C6185", "404165", "D1B305", "A49286", "E0D1B4", "BDD9D6", "BDA0A0", "B8D0DE", "9FC2D6", "86B4CF", "73A2BD", "6792AB"];
+    return "#" + colors[Math.floor(Math.random() * colors.length)];
+}
+
+var attrs = ["meaty", "spikes", "skinny", "short", "tall", "shifty-eyes", "jumping"],
+    rare_attrs = ["flex", "sitting", "shifty", "bouncy", "blink", "sad", "dopey", "happy", "angry", "shifting", "closed-mouth", "little", "big"],
+    super_rare_attrs = ["giant", "tiny", "wide-open-mouth"];
 // global var
 
 //--object sovog--
@@ -7,44 +45,7 @@ var makeSovog = function (data) {
         data = {};
     }
     sovogcount++;
-    var container = $("#sovogs"),
-        looking_options = [(Math.random() * 1.6) + "em", (-(Math.random() * 6) + "em")],
-        speeds = ["x-slow", "slow", "normal", "fast", "x-fast"],
-        color_string = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, "a", "b", "c", "d", "e", "f"];
-    var createColor = function (range) {
-        var color = "#";
-        for (var i = 0; i < 6; i++) {
-            if (range) {
-                switch (range) {
-                    case "light":
-                        color += color_string[(Math.floor(Math.random() * 6)) + 10];
-                        break;
-                    case "light":
-                        color += color_string[(Math.floor(Math.random() * 6)) + 5];
-                        break;
-                    case "dark":
-                        color += color_string[Math.floor(Math.random() * 6)];
-                        break;
-                    default:
-                        color += color_string[Math.floor(Math.random() * 16)];
-                        break;
-                }
-            }
-            else {
-                color += color_string[Math.floor(Math.random() * 16)];
-            }
-        }
-        return color;
-    };
-
-    var randomColor = function () {
-        var colors = ["FFD230", "FFBF52", "EDCC82", "DCD8B2", "DCCDBC", "88B2AE", "5F8B9C", "4C6185", "404165", "D1B305", "A49286", "E0D1B4", "BDD9D6", "BDA0A0", "B8D0DE", "9FC2D6", "86B4CF", "73A2BD", "6792AB"];
-        return "#" + colors[Math.floor(Math.random() * colors.length)];
-    }
-
-    var attrs = ["meaty", "spikes", "skinny", "short", "tall", "shifty-eyes", "jumping"],
-        rare_attrs = ["flex", "sitting", "shifty", "bouncy", "blink", "sad", "dopey", "happy", "angry", "shifting", "closed-mouth", "little", "big"],
-        super_rare_attrs = ["giant", "tiny", "wide-open-mouth"], which_attrs;
+    var which_attrs;
     if (data.attr) {
         which_attrs = data.attr;
     } else {
@@ -149,32 +150,32 @@ var makeSovog = function (data) {
     this.updateSovog();
 
     this.changeSpeed = function(spd){
-        this.speed = speeds[spd];
+        speed = speeds[spd];
         this.updateSovog();
     };
 
     this.changeAttrs = function(atr){
-        this.which_attrs = atr;
+        which_attrs = atr;
         this.updateSovog();
     }
 
     this.sovog.click(function(){
-        data.click();
+        data.click(this);
     })
 }
 //--object sovog--
 
-var Scene = function(ne){
-    var nextscene = ne?ne:new Scene(),
-        act = function(){
-        };
+var Scene = function(data){
+    var nextscene = data.nextScene?data.nextScene:null,
+        act = data.act?data.act:null;
 
-    var play = function(){
+    this.play = function(){
         act();
+        if(nextscene)
         nextscene.play();
     };
 
-    var setAct = function(ac){
+    this.setAct = function(ac){
         act = ac;
     };
 };
@@ -191,14 +192,19 @@ var boro = new makeSovog({
     attr: ["sad", "giant", "jumping"],
     speed: 1,
     click: function(){
-        makeSovog();
+        boro.changeAttrs(['happy', 'small']);
     }
 });
 
+var sovogs = [], i = 0;
 $(document).ready(function(){
     $("#make-sovog").click(function () {
-        makeSovog();
+        sovogs[i] = new makeSovog({
+            speed: 1,
+            click: function(self){
+                self.changeAttrs(['sad', 'sitting', 'flex']);
+            }
+        });
     });
+    i++;
 });
-//makeSovog('');
-//makeSovog('');
