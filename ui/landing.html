@@ -119,8 +119,14 @@
         window.analytics.page();
     </script>
 
+    <script type="text/javascript" src="../iframedsallad_files/blobsallad.js">
+    </script>
+
+    <style type="text/css">
+        canvas { }
+    </style>
 </head>
-<body class="index signups-full_index">
+<body class="index signups-full_index" onload="init();">
 <!-- Google Tag Manager -->
 <noscript>&lt;iframe src="//www.googletagmanager.com/ns.html?id=GTM-KHWBBT"
     height="0" width="0" style="display:none;visibility:hidden"&gt;&lt;/iframe&gt;</noscript>
@@ -161,8 +167,8 @@
 <div class="m-pikabu-container">
     <header>
         <div class="wrapper-full">
-            <a class="logo" href="">DigitalOcean</a>
-            <a id="hiring" href="/company/careers/">We're Hiring!</a>
+            <div style="width: 113px; float: left"><span style="font-size: 50px"><strong>Daab</strong></span></div><canvas id="blob" width="50" height="50"></canvas><span style="font-size: 50px; margin-left:-15px"><strong>!</strong></span>
+            <!--<a id="hiring" href="/company/careers/">We're Hiring!</a>-->
             <a class="m-pikabu-nav-toggle icon-navicon" data-role="left">
                 <span></span>
             </a>
@@ -173,7 +179,6 @@
                     </li>
                 </ul>
             </nav>
-
             <nav>
                 <ul>
                     <li><a class="" href="/pricing/">Pricing</a></li>
@@ -184,7 +189,6 @@
             </nav>
         </div>
     </header>
-
 
     <section class="main">
         <section class="homepage-header">
@@ -224,7 +228,11 @@
                                         <li class="green"></li>
                                     </ul>
                                 </div>
-                                <div class="browser-content"></div>
+                                <div class="browser-content">
+                                    <iframe src="video1.html" height="440" width="687" frameborder="0" scrolling="no">
+                                    Your browser dosen't support iframes, click <a href="example2.html">here</a> to view the example.
+                                    </iframe>
+                                </div>
                             </div>
                         </div>
                     </div>

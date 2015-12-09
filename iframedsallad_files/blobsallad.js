@@ -794,7 +794,7 @@ function BlobCollective(x, y, startNum, maxNum) {
     this.tmpForce = new Vector(0.0, 0.0);
     this.selectedBlob = null;
 
-    this.blobs[0] = new Blob(0.17, 0.1, 0.07, 8);
+    this.blobs[0] = new Blob(x, y, 0.07, 8);
     //this.blobs[1] = new Blob(0.3, 0.07, 0.07, 8);
 
     this.split = function () {
@@ -1116,7 +1116,7 @@ function init() {
     }
 
     function getMouseCoords(event) {
-        var hor = 100;
+        var hor = 113 + 80;
         var ver = 0;
         if (event == null) {
             event = window.event;
@@ -1165,8 +1165,8 @@ function init() {
         savedMouseCoords = mouseCoords;
     }
 
-    env = new Environment(0.0, 0.0, 0.25, 0.2);
-    blobColl = new BlobCollective(0.0, 1.0, 2, 2);
+    env = new Environment(0.0, 0.0, 0.25, 0.212);
+    blobColl = new BlobCollective(0.15, 0.08, 2, 2);
     gravity = new Vector(0.0, 10.0);
     stopped = false;
     timeout();
