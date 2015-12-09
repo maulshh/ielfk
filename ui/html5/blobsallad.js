@@ -1012,8 +1012,8 @@ function debug(msg, okFunc, cancelFunc) {
 }
 
 var env;
-var width = 50.0;
-var height = 50.0;
+var width = 165.0;
+var height = 60.0;
 var scaleFactor = 200.0;
 var blobColl;
 var gravity;
@@ -1163,8 +1163,8 @@ function init() {
         savedMouseCoords = mouseCoords;
     }
 
-    env = new Environment(0.0, 0.0, 0.25, 0.203);
-    blobColl = new BlobCollective(0.15, 0.08, 2, 2);
+    env = new Environment(0.0, 0.0, 0.825, 0.260);
+    blobColl = new BlobCollective(-0.5, 0.08, 2, 2);
     gravity = new Vector(0.0, 10.0);
     stopped = false;
     timeout();
