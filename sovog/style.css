@@ -67,7 +67,7 @@ body {
   height: 400px;
   width: 80vw;
   margin-top: 2vh;
-  margin-left: 240px;
+  margin-left: 0px;
 }
 .wrapper {
   position: relative;
@@ -354,6 +354,9 @@ lesshat-selector {
   transition: height 0.2s ease-out;
 }
 .sovog .head .mouth:hover {
+  height: 2.86em;
+}
+.sovog .head .hovered {
   height: 2.86em;
 }
 .sovog .neck {

@@ -66,7 +66,7 @@ var makeSovog = function (data) {
             }
         }
     }
-    var looking = looking_options[Math.floor(Math.random() * 2)],
+    var looking = data.looking?data.looking:looking_options[Math.floor(Math.random() * 2)],
         speed = speeds[data.speed?data.speed-1:Math.floor(Math.random() * speeds.length)],
         light_color = data.arm?data.arm:randomColor(),
         dark_color = data.body?data.body:randomColor(),
@@ -108,7 +108,7 @@ var makeSovog = function (data) {
                 '</div>' +
                 '<div class="mouth"></div>' +
             '</div>' +
-            '<div class="neck" style="background: ' + light_color + ';"></div>' +
+            '<div class="neck" style="background: ' + '#FFFFFF' + ';"></div>' +
             '<div class="body">' +
                 '<div class="torso" style="background: ' + dark_color + ';">' +
                     '<div class="left-side" style="background: ' + dark_color + ';"></div>' +
@@ -139,7 +139,10 @@ var makeSovog = function (data) {
 
     var element = '<div class="wrapper" id="'+ sovogname+'">' +
         '</div>';
-    container.append(element);
+    if(data.append)
+        data.append.append(element);
+    else
+        container.append(element);
 
     this.sovog = $('#'+sovogname);
 
@@ -166,13 +169,16 @@ var makeSovog = function (data) {
 //--object sovog--
 
 var Scene = function(data){
-    var nextscene = data.nextScene?data.nextScene:null,
+    var nextscene = data.nextscene?data.nextscene:null,
         act = data.act?data.act:null;
 
     this.play = function(){
         act();
-        if(nextscene)
-        nextscene.play();
+        setTimeout(function(){
+            if(nextscene != null){
+                nextscene.play()
+            }
+        }, data.timeout);
     };
 
     this.setAct = function(ac){
@@ -180,8 +186,24 @@ var Scene = function(data){
     };
 };
 
-var speak = function(text){
-    $('#make-sovog').text(text);
+var opened = 0,
+to_open = 0;
+function open_mouth(){
+    if(opened < to_open){
+        var moth = $(".mouth:first");
+        if(moth.hasClass('hovered')){
+            moth.removeClass('hovered');
+        } else {
+            moth.addClass('hovered');
+        }
+        opened++;
+    }
+    setTimeout('open_mouth()', 200);
+}
+
+var speak = function(data){
+    $('#make-sovog').html(data.text);
+    to_open += data.length*2;
 };
 
 var boro = new makeSovog({
@@ -189,20 +211,50 @@ var boro = new makeSovog({
     body: '#595959',
     arm: '#787878' ,
     eye: '#000000',
-    attr: ["sad", "giant", "jumping"],
-    speed: 1,
+    looking: "-1.7em",
+    attr: ['big', 'tall', 'skinny'],
+    speed: 2,
     click: function(){
-        boro.changeAttrs(['happy', 'small']);
-    }
+    },
+    append: $('#Layer_1')
 });
+
+//========================================================================================
+
+
+var scene2 = new Scene({
+    act: function(){
+        speak({
+            text:"sesuatu dek",
+            length: 5
+        });
+        setTimeout('', 1000);
+    },
+    nextscene: null,
+    timeout: 3000
+});
+
+var scene = new Scene({
+    act: function(){
+        speak({
+            text:"Hi, my name is <strong>Boro</strong>. And I am a <strong>Robot</strong>",
+            length: 11
+        });
+    },
+    nextscene: scene2,
+    timeout: 5000
+});
+
+//========================================================================================
 
 var sovogs = [], i = 0;
 $(document).ready(function(){
+    open_mouth();
+    scene.play();
     $("#make-sovog").click(function () {
         sovogs[i] = new makeSovog({
             speed: 1,
             click: function(self){
-                self.changeAttrs(['sad', 'sitting', 'flex']);
             }
         });
     });
