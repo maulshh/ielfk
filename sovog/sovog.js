@@ -137,6 +137,73 @@ var makeSovog = function (data) {
         return elem;
     };
 
+
+    this.getElementdestroyed = function(){
+        var elem = '<div class="sovog';
+        if (which_attrs) {
+            for (var i = 0, len = which_attrs.length; i < len; i++) {
+                elem += (' ' + which_attrs[i]);
+            }
+        }
+        elem += " " + speed
+        elem += '">' +
+            '<div class="body">' +
+            '<div class="torso" style="background: ' + dark_color + ';">' +
+
+            '<div class="neck" style="background: ' + '#FFFFFF' + ';"></div>' +
+            '<div class="leg left" style="background: ' + light_color + ';">' +
+            '<div class="knee"></div>' +
+            '<div class="shoulder left"></div>' +
+            '<div class="shoulder right"></div>' +
+            '<div class="foot" style="background: ' + dark_color + ';"></div>' +
+            '</div>' +
+            '<div class="leg right" style="background: ' + light_color + ';">' +
+            '<div class="head">' +
+            '<div class="top">' +
+            '<div class="base" style="background: ' + light_color + ';"></div>' +
+            '<div class="antennae left">' +
+            '<div class="ball" style="background: ' + dark_color + ';"></div>' +
+            '</div>' +
+            '<div class="antennae right">' +
+            '<div class="ball" style="background: ' + dark_color + ';"></div>' +
+            '</div>' +
+            '</div>' +
+            '<div class="face" style="background: ' + dark_color + ';">' +
+            '<div class="left-side" style="background: ' + dark_color + ';"></div>' +
+            '<div class="right-side" style="background: ' + dark_color + ';"></div>' +
+            '</div>' +
+            '<div class="eye left">' +
+            '<div class="eyelid" style="background: ' + light_color + ';"></div>' +
+            '<div class="eyelid-two" style="background: ' + light_color + ';"></div>' +
+            '<div class="eyeball" style="margin-left: ' + looking + '; background: ' + eye_color + ';"></div>' +
+            '</div>' +
+            '<div class="eye right">' +
+            '<div class="eyelid" style="background: ' + light_color + ';"></div>' +
+            '<div class="eyelid-two" style="background: ' + light_color + ';"></div>' +
+            '<div class="eyeball" style="margin-left: ' + looking + '; background: ' + eye_color + ';"></div>' +
+            '</div>' +
+            '<div class="mouth"></div>' +
+            '</div>' +
+            '<div class="knee"></div>' +
+            '<div class="foot" style="background: ' + dark_color + ';"></div>' +
+            '</div>' +
+
+            '<div class="arm right" style="border-right-color: ' + light_color + ';">' +
+            '<div class="elbow"></div>' +
+            '<div class="arm left" style="border-left-color: ' + light_color + ';">' +
+            '<div class="left-side" style="background: ' + dark_color + ';"></div>' +
+            '<div class="right-side" style="background: ' + dark_color + ';"></div>' +
+            '</div>' +
+            '<div class="elbow"></div>' +
+            '<div class="hand" style="background: ' + dark_color + ';"></div>' +
+            '</div>' +
+            '<div class="hand" style="background: ' + dark_color + ';"></div>' +
+            '</div>' +
+            '</div>' +
+            '</div>';
+        return elem;
+    };
+
     var element = '<div class="wrapper" id="'+ sovogname+'">' +
         '</div>';
     if(data.append)
@@ -146,11 +213,18 @@ var makeSovog = function (data) {
 
     this.sovog = $('#'+sovogname);
 
+    this.destroySovog = function(){
+        this.sovog.html(this.getElementdestroyed);
+    };
+
     this.updateSovog = function(){
         this.sovog.html(this.getElement);
     };
 
-    this.updateSovog();
+    if(data.destroy){
+        this.destroySovog();
+    } else
+        this.updateSovog();
 
     this.changeSpeed = function(spd){
         speed = speeds[spd];
@@ -173,12 +247,14 @@ var Scene = function(data){
         act = data.act?data.act:null;
 
     this.play = function(){
-        act();
-        setTimeout(function(){
-            if(nextscene != null){
-                nextscene.play()
-            }
-        }, data.timeout);
+        act(nextscene);
+        if(data.timeout){
+            setTimeout(function(){
+                if(nextscene != null){
+                    nextscene.play()
+                }
+            }, data.timeout);
+        }
     };
 
     this.setAct = function(ac){
@@ -206,6 +282,15 @@ var speak = function(data){
     to_open += data.length*2;
 };
 
+var subtitle = function(data){
+    $('#subtitle').html(data.text);
+    if(data.timeout){
+        setTimeout(function(){
+            $('#subtitle').html('');
+        }, data.timeout);
+    }
+};
+
 var boro = new makeSovog({
     name: 'boro',
     body: '#595959',
@@ -220,21 +305,62 @@ var boro = new makeSovog({
 });
 
 //========================================================================================
+var scene, scene2, scene3, scene4, scene5, scene6;
 
-
-var scene2 = new Scene({
+scene5 = new Scene({
     act: function(){
         speak({
-            text:"sesuatu dek",
-            length: 5
+            text:"I'm <strong>Boro</strong> the <strong>Robot</strong>!",
+            length: 6
         });
-        setTimeout('', 1000);
     },
-    nextscene: null,
-    timeout: 3000
+    nextscene: scene6,
+    timeout: 2000
 });
 
-var scene = new Scene({
+scene4 = new Scene({
+    act: function(next){
+        subtitle({
+            text:"Click On The <strong>Robot</strong>"
+        });
+        var clicked = false
+        $('#boro').click(function(){
+            if(!clicked){
+                subtitle({
+                    text:"<strong>Correct!!</strong>",
+                    timeout:1000
+                });
+                next.play();
+                clicked = true;
+            }
+        })
+    },
+    nextscene: scene5
+});
+
+scene3 = new Scene({
+    act: function(){
+        speak({
+            text:"I'm a Robot!",
+            length: 4
+        });
+    },
+    nextscene: scene4,
+    timeout: 2000
+});
+
+scene2 = new Scene({
+    act: function(){
+        speak({
+            text:"What am I?",
+            length: 3
+        });
+    },
+    nextscene: scene3,
+    timeout: 2000
+});
+
+scene = new Scene({
     act: function(){
         speak({
             text:"Hi, my name is <strong>Boro</strong>. And I am a <strong>Robot</strong>",
@@ -249,7 +375,10 @@ var scene = new Scene({
 
 $(document).ready(function(){
     open_mouth();
+    var play = false;
     $("#boro").click(function () {
-        scene.play();
+        if(!play)
+            scene.play();
+        play = true;
     });
 });
