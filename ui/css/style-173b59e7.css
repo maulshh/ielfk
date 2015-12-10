@@ -2925,12 +2925,12 @@ a {
 }
 
 .signups-full_index .main, .bitnami_index .main {
-    height: 580px
+    min-height: 580px
 }
 
 .signups-full_index .main .homepage-header .container, .bitnami_index .main .homepage-header .container {
     border-top: 1px solid #ddd;
-    height: 90%;
+    min-height: 90%;
     color: #666
 }
 
