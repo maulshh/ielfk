@@ -247,16 +247,9 @@ var scene = new Scene({
 
 //========================================================================================
 
-var sovogs = [], i = 0;
 $(document).ready(function(){
     open_mouth();
-    scene.play();
-    $("#make-sovog").click(function () {
-        sovogs[i] = new makeSovog({
-            speed: 1,
-            click: function(self){
-            }
-        });
+    $("#boro").click(function () {
+        scene.play();
     });
-    i++;
 });
