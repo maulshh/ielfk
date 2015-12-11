@@ -205,9 +205,12 @@ var makeSovog = function (data) {
     };
 
     var element = '<div class="wrapper" id="'+ sovogname+'">' +
-        '</div>';
-    if(data.append)
+        '<div class="button" id="' + sovogname + '-speak">Hi!</div>' +
+    '</div>';
+    if(data.append){
         data.append.append(element);
+        data.append.append('<div class="button" id="' + sovogname + '-speak">Hi!</div>');
+    }
     else
         container.append(element);
 
@@ -278,7 +281,7 @@ function open_mouth(){
 }
 
 var speak = function(data){
-    $('#make-sovog').html(data.text);
+    $('#boro-speak').html(data.text);
     to_open += data.length*2;
 };
 
@@ -302,10 +305,58 @@ var boro = new makeSovog({
     click: function(){
     },
     append: $('#Layer_1')
-});
+}), friend1;
 
 //========================================================================================
 var scene, scene2, scene3, scene4, scene5, scene6;
+
+var scene7 = new Scene({
+    act: function(){
+        friend1 =  new makeSovog({
+            name: 'friend1',
+            body: '#6792AB',
+            arm: '#787878' ,
+            eye: '#000000',
+            click: function(){
+            },
+            destroy: true
+        });
+        speak({
+            text:"Can you help me?",
+            length: 4
+        });
+        subtitle({
+            text:"Click on the other robot"
+        });
+        var clicked1 = false
+        $('#friend1').click(function(){
+            if(!clicked1){
+                subtitle({
+                    text:"<strong>Yay!!</strong>",
+                    timeout:2000
+                });
+                friend1.updateSovog();
+                boro.changeAttrs(['happy', 'big', 'tall', 'skinny', 'jumping']);
+                next.play();
+                clicked1 = true;
+            }
+        })
+    },
+    nextscene: null,
+    timeout: 4000
+});
+
+scene6 = new Scene({
+    act: function(){
+        boro.changeAttrs(['sad', 'big', 'tall', "dopey", 'skinny']);
+        speak({
+            text:"But I am very <strong>Sad</strong>, I have no friend..",
+            length: 9
+        });
+    },
+    nextscene: scene7,
+    timeout: 5000
+});
 
 scene5 = new Scene({
     act: function(){
@@ -315,7 +366,7 @@ scene5 = new Scene({
         });
     },
     nextscene: scene6,
-    timeout: 2000
+    timeout: 6000
 });
 
 scene4 = new Scene({
@@ -328,7 +379,7 @@ scene4 = new Scene({
             if(!clicked){
                 subtitle({
                     text:"<strong>Correct!!</strong>",
-                    timeout:1000
+                    timeout:2000
                 });
                 next.play();
                 clicked = true;
@@ -357,7 +408,7 @@ scene2 = new Scene({
         });
     },
     nextscene: scene3,
-    timeout: 2000
+    timeout: 3400
 });
 
 scene = new Scene({
