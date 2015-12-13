@@ -697,10 +697,10 @@ function Blob(x, y, radius, numPointMasses) {
         index = index % this.pointMasses.length;
         return this.pointMasses[index];
     }
-    this.drawBody = function (ctx, scaleFactor) {
+    this.drawBody = function (ctx, scaleFactor, border) {
         var i;
 
-        ctx.strokeStyle = "#000000";
+        ctx.strokeStyle = border;
         if (this.selected == true) {
             ctx.fillStyle = "#FFFFFF";
         }
@@ -755,14 +755,14 @@ function Blob(x, y, radius, numPointMasses) {
         }
     }
 
-    this.draw = function (ctx, scaleFactor) {
+    this.draw = function (ctx, scaleFactor, border) {
         var i;
         var up, ori, ang;
 
-        this.drawBody(ctx, scaleFactor);
+        this.drawBody(ctx, scaleFactor, border);
 
-        ctx.strokeStyle = "#000000";
-        ctx.fillStyle = "#000000"
+        ctx.strokeStyle = border;
+        ctx.fillStyle = border;
 
         ctx.save();
         ctx.translate(this.middlePointMass.getXPos() * scaleFactor,
@@ -794,7 +794,8 @@ function BlobCollective(x, y, startNum, maxNum) {
     this.tmpForce = new Vector(0.0, 0.0);
     this.selectedBlob = null;
 
-    this.blobs[0] = new Blob(x, y, 0.07, 8);
+    this.blobs[0] = new Blob(x, y, 0.07*startNum/2, 8);
+
     //this.blobs[1] = new Blob(0.3, 0.07, 0.07, 8);
 
     this.split = function () {
@@ -831,6 +832,12 @@ function BlobCollective(x, y, startNum, maxNum) {
         this.blobs[emptySlot] = newBlob;
 
         this.numActive++;
+    }
+
+    if(startNum > 1){
+        for(var a = 1; a < startNum; a++){
+            this.split();
+        }
     }
 
     this.findSmallest = function (exclude) {
@@ -990,14 +997,14 @@ function BlobCollective(x, y, startNum, maxNum) {
             this.blobs[i].addForce(this.tmpForce);
         }
     }
-    this.draw = function (ctx, scaleFactor) {
+    this.draw = function (ctx, scaleFactor, border) {
         var i;
 
         for (i = 0; i < this.blobs.length; i++) {
             if (this.blobs[i] == null) {
                 continue;
             }
-            this.blobs[i].draw(ctx, scaleFactor);
+            this.blobs[i].draw(ctx, scaleFactor, border);
         }
     }
 }
@@ -1034,7 +1041,7 @@ function update() {
     blobColl.setForce(gravity);
 }
 
-function draw() {
+function draw(border) {
     var canvas = document.getElementById('blob');
     if (canvas.getContext == null) {
         return;
@@ -1045,11 +1052,11 @@ function draw() {
     ctx.clearRect(0, 0, width, height);
 
     env.draw(ctx, scaleFactor);
-    blobColl.draw(ctx, scaleFactor);
+    blobColl.draw(ctx, scaleFactor, border);
 }
 
-function timeout() {
-    draw();
+function timeout(border) {
+    draw(border);
     update();
 
     if (stopped == false) {
@@ -1057,7 +1064,11 @@ function timeout() {
     }
 }
 
-function init() {
+function init(border, count, max, w, h) {
+    if(w)
+        width = w;
+    if(h)
+        height = h;
     var canvas = document.getElementById('blob');
     if (canvas.getContext == null) {
         alert("You need Firefox version 1.5 or higher for this to work, sorry.");
@@ -1163,18 +1174,18 @@ function init() {
         savedMouseCoords = mouseCoords;
     }
 
-    env = new Environment(0.0, 0.0, 0.825, 0.260);
-    blobColl = new BlobCollective(-0.5, 0.08, 2, 2);
+    env = new Environment(0.0, 0.0, (w?w:width)/scaleFactor, (h?h:height)/scaleFactor-0.04);
+    blobColl = new BlobCollective(-0.5, 0.08, count?count:1, max?max:2);
     gravity = new Vector(0.0, 10.0);
     stopped = false;
-    timeout();
+    timeout(border?border:'#000000');
 }
 function stop() {
     stopped = true;
 }
-function start() {
+function start(border) {
     stopped = false;
-    timeout();
+    timeout(border?border:'#000000');
 }
 function toggleGravity() {
     if (gravity.getY() > 0.0) {

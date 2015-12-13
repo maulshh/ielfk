@@ -27,6 +27,6 @@ function clearLog()
   canvas { }
 </style>
 </head>
-<body onload="init();" style="margin: 0">
-<canvas id="blob" width="165" height="60"></canvas>
+<body onload="init('<?=isset($_GET['border'])?$_GET['border']:''?>', <?=isset($_GET['count'])?$_GET['count']:2?>, <?=isset($_GET['max'])?$_GET['max']:1?><?=isset($_GET['w'])?', '.$_GET['w']:''?> <?=isset($_GET['h'])?', '.$_GET['h']:''?>);" style="margin: 0">
+<canvas id="blob" width="<?=isset($_GET['w'])?$_GET['w']:165?>" height="<?=isset($_GET['h'])?$_GET['h']:60?>"></canvas>
 </body></html>

@@ -205,30 +205,28 @@ var makeSovog = function (data) {
     };
 
     var element = '<div class="wrapper" id="'+ sovogname+'">' +
-        '<div class="button" id="' + sovogname + '-speak">Hi!</div>' +
     '</div>';
-    if(data.append){
+    if(data.append)
         data.append.append(element);
-        data.append.append('<div class="button" id="' + sovogname + '-speak">Hi!</div>');
-    }
-    else {
+    else
         container.append(element);
-        //container.append('<div class="button" id="' + sovogname + '-speak">Hi!</div>');
-    }
 
     this.sovog = $('#'+sovogname);
 
     this.destroySovog = function(){
         this.sovog.html(this.getElementdestroyed);
+        this.sovog.append('<div class="button" id="' + sovogname + '-speak">Hi!</div>');
     };
 
     this.updateSovog = function(){
         this.sovog.html(this.getElement);
+        //alert(this.getElement)
+        this.sovog.append('<div class="button" id="' + sovogname + '-speak">Hi!</div>');
     };
 
-    if(data.destroy){
+    if(data.destroy)
         this.destroySovog();
-    } else
+    else
         this.updateSovog();
 
     this.changeSpeed = function(spd){
@@ -296,32 +294,33 @@ var subtitle = function(data){
     }
 };
 
-var boro = new makeSovog({
-    name: 'boro',
+var green = new makeSovog({
+    name: 'green',
+    body: '#02A833',
+    arm: '#787878' ,
+    eye: '#000000',
+    click: function(){
+    }
+}), red = new makeSovog({
+    name: 'red',
     body: '#DE2226',
     arm: '#787878' ,
     eye: '#000000',
-    looking: "-1.7em",
-    attr: ['big', 'tall', 'skinny'],
-    speed: 2,
     click: function(){
-    },
-}), friend1;
-
+    }
+}), blue =  new makeSovog({
+    name: 'blue',
+    body: '#4772BB',
+    arm: '#787878' ,
+    eye: '#000000',
+    click: function(){
+    }
+});
 //========================================================================================
 var scene, scene2, scene3, scene4, scene5, scene6;
 
 var scene7 = new Scene({
     act: function(){
-        friend1 =  new makeSovog({
-            name: 'friend1',
-            body: '#6792AB',
-            arm: '#787878' ,
-            eye: '#000000',
-            click: function(){
-            },
-            destroy: true
-        });
         speak({
             text:"Can you help me?",
             length: 4
