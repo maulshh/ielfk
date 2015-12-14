@@ -70,8 +70,8 @@ var makeSovog = function (data) {
         speed = speeds[data.speed?data.speed-1:Math.floor(Math.random() * speeds.length)],
         light_color = data.arm?data.arm:randomColor(),
         dark_color = data.body?data.body:randomColor(),
-        eye_color = data.eye?data.eye:randomColor(),
-        sovogname = data.name?data.name:"sovog"+sovogcount;
+        eye_color = data.eye?data.eye:randomColor();
+    this.sovogname = data.name?data.name:"sovog"+sovogcount;
 
     this.getElement = function(){
         var elem = '<div class="sovog';
@@ -204,24 +204,24 @@ var makeSovog = function (data) {
         return elem;
     };
 
-    var element = '<div class="wrapper" id="'+ sovogname+'">' +
-    '</div>';
+    var element = '<div class="wrapper" id="'+ this.sovogname+'">' +
+        '</div>';
     if(data.append)
         data.append.append(element);
     else
         container.append(element);
 
-    this.sovog = $('#'+sovogname);
+    this.sovog = $('#'+this.sovogname);
 
     this.destroySovog = function(){
         this.sovog.html(this.getElementdestroyed);
-        this.sovog.append('<div class="button" id="' + sovogname + '-speak">Hi!</div>');
+        this.sovog.append('<div class="button" id="' + this.sovogname + '-speak">Hi!</div>');
     };
 
     this.updateSovog = function(){
         this.sovog.html(this.getElement);
         //alert(this.getElement)
-        this.sovog.append('<div class="button" id="' + sovogname + '-speak">Hi!</div>');
+        this.sovog.append('<div class="button" id="' + this.sovogname + '-speak">Hi!</div>');
     };
 
     if(data.destroy)
@@ -281,7 +281,7 @@ function open_mouth(){
 }
 
 var speak = function(data){
-    $('#boro-speak').html(data.text);
+    $('#'+data.robot.sovogname+'-speak').html(data.text);
     to_open += data.length*2;
 };
 
@@ -293,151 +293,3 @@ var subtitle = function(data){
         }, data.timeout);
     }
 };
-
-var green = new makeSovog({
-    name: 'green',
-    body: '#02A833',
-    arm: '#787878' ,
-    eye: '#000000',
-    click: function(){
-    }
-}), red = new makeSovog({
-    name: 'red',
-    body: '#DE2226',
-    arm: '#787878' ,
-    eye: '#000000',
-    click: function(){
-    }
-}), blue =  new makeSovog({
-    name: 'blue',
-    body: '#4772BB',
-    arm: '#787878' ,
-    eye: '#000000',
-    click: function(){
-    }
-});
-//========================================================================================
-var scene, scene2, scene3, scene4, scene5, scene6;
-
-var scene7 = new Scene({
-    act: function(){
-        speak({
-            text:"Can you help me?",
-            length: 4
-        });
-        subtitle({
-            text:"Click on the other robot"
-        });
-        var clicked1 = false
-        $('#friend1').click(function(){
-            if(!clicked1){
-                subtitle({
-                    text:"<strong>Yay!!</strong>",
-                    timeout:2000
-                });
-                friend1.updateSovog();
-                boro.changeAttrs(['happy', 'big', 'tall', 'skinny', 'jumping']);
-                next.play();
-                clicked1 = true;
-            }
-        })
-    },
-    nextscene: null,
-    timeout: 4000
-});
-
-scene6 = new Scene({
-    act: function(){
-        boro.changeAttrs(['sad', 'big', 'tall', "dopey", 'skinny']);
-        speak({
-            text:"But I am very <strong>Sad</strong>, I have no friend..",
-            length: 9
-        });
-    },
-    nextscene: scene7,
-    timeout: 5000
-});
-
-scene5 = new Scene({
-    act: function(){
-        speak({
-            text:"I'm <strong>Boro</strong> the <strong>Robot</strong>!",
-            length: 6
-        });
-    },
-    nextscene: scene6,
-    timeout: 6000
-});
-
-scene4 = new Scene({
-    act: function(next){
-        subtitle({
-            text:"Click On The <strong>Robot</strong>"
-        });
-        var clicked = false
-        $('#boro').click(function(){
-            if(!clicked){
-                subtitle({
-                    text:"<strong>Correct!!</strong>",
-                    timeout:2000
-                });
-                next.play();
-                clicked = true;
-            }
-        })
-    },
-    nextscene: scene5
-});
-
-scene3 = new Scene({
-    act: function(){
-        speak({
-            text:"I'm a Robot!",
-            length: 4
-        });
-    },
-    nextscene: scene4,
-    timeout: 2000
-});
-
-scene2 = new Scene({
-    act: function(){
-        speak({
-            text:"What am I?",
-            length: 3
-        });
-    },
-    nextscene: scene3,
-    timeout: 3400
-});
-
-scene = new Scene({
-    act: function(){
-        speak({
-            text:"Hi, my name is <strong>Boro</strong>. And I am a <strong>Robot</strong>",
-            length: 11
-        });
-    },
-    nextscene: scene2,
-    timeout: 5000
-});
-
-//========================================================================================
-
-function pad ( val ) { return val > 9 ? val : "0" + val; }
-
-$(document).ready(function(){
-    open_mouth();
-    var play = false;
-    $("#boro").click(function () {
-        if(!play){
-            scene.play();
-            setInterval( function(){
-                $("#seconds").html(pad(++sec%60));
-                $("#minutes").html(pad(parseInt(sec/60,10)));
-            }, 1000);
-        }
-        play = true;
-        var sec = 0;
-    });
-});

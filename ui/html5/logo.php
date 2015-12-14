@@ -20,7 +20,7 @@ function clearLog()
 
 </script>
 
-<script type="text/javascript" src="blobsallad.js">
+<script type="text/javascript" src="blobsallad/blobsallad.js">
 </script>
 
 <style type="text/css">

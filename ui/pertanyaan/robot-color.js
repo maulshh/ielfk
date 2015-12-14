@@ -205,30 +205,28 @@ var makeSovog = function (data) {
     };
 
     var element = '<div class="wrapper" id="'+ sovogname+'">' +
-        '<div class="button" id="' + sovogname + '-speak">Hi!</div>' +
     '</div>';
-    if(data.append){
+    if(data.append)
         data.append.append(element);
-        data.append.append('<div class="button" id="' + sovogname + '-speak">Hi!</div>');
-    }
-    else {
+    else
         container.append(element);
-        //container.append('<div class="button" id="' + sovogname + '-speak">Hi!</div>');
-    }
 
     this.sovog = $('#'+sovogname);
 
     this.destroySovog = function(){
         this.sovog.html(this.getElementdestroyed);
+        this.sovog.append('<div class="button" id="' + sovogname + '-speak">Hi!</div>');
     };
 
     this.updateSovog = function(){
         this.sovog.html(this.getElement);
+        //alert(this.getElement)
+        this.sovog.append('<div class="button" id="' + sovogname + '-speak">Hi!</div>');
     };
 
-    if(data.destroy){
+    if(data.destroy)
         this.destroySovog();
-    } else
+    else
         this.updateSovog();
 
     this.changeSpeed = function(spd){
@@ -296,32 +294,33 @@ var subtitle = function(data){
     }
 };
 
-var boro = new makeSovog({
-    name: 'boro',
+var green = new makeSovog({
+    name: 'green',
+    body: '#02A833',
+    arm: '#787878' ,
+    eye: '#000000',
+    click: function(){
+    }
+}), red = new makeSovog({
+    name: 'red',
     body: '#DE2226',
     arm: '#787878' ,
     eye: '#000000',
-    looking: "-1.7em",
-    attr: ['big', 'tall', 'skinny'],
-    speed: 2,
     click: function(){
-    },
-}), friend1;
-
+    }
+}), blue =  new makeSovog({
+    name: 'blue',
+    body: '#4772BB',
+    arm: '#787878' ,
+    eye: '#000000',
+    click: function(){
+    }
+});
 //========================================================================================
 var scene, scene2, scene3, scene4, scene5, scene6;
-
+var score = 0;
 var scene7 = new Scene({
     act: function(){
-        friend1 =  new makeSovog({
-            name: 'friend1',
-            body: '#6792AB',
-            arm: '#787878' ,
-            eye: '#000000',
-            click: function(){
-            },
-            destroy: true
-        });
         speak({
             text:"Can you help me?",
             length: 4
@@ -414,31 +413,20 @@ scene2 = new Scene({
 
 scene = new Scene({
     act: function(){
-        speak({
-            text:"Hi, my name is <strong>Boro</strong>. And I am a <strong>Robot</strong>",
-            length: 11
+        subtitle({
+            text:"Click On The <strong>Robot</strong>"
         });
+        var clicked = false
+        $('#green').click(function(){
+            if(!clicked){
+                subtitle({
+                    text:"<strong>Correct!!</strong>",
+                    timeout:2000
+                });
+                next.play();
+                clicked = true;
+            }
+        })
     },
     nextscene: scene2,
-    timeout: 5000
-});
-
-//========================================================================================
-
-function pad ( val ) { return val > 9 ? val : "0" + val; }
-
-$(document).ready(function(){
-    open_mouth();
-    var play = false;
-    $("#boro").click(function () {
-        if(!play){
-            scene.play();
-            setInterval( function(){
-                $("#seconds").html(pad(++sec%60));
-                $("#minutes").html(pad(parseInt(sec/60,10)));
-            }, 1000);
-        }
-        play = true;
-        var sec = 0;
-    });
 });

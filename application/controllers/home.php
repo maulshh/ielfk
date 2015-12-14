@@ -21,23 +21,7 @@ class Home extends EMIF_Controller {
 	}
 
     public function index(){
-        $this->data['pages'] = 'Beranda';
-        $this->_loaddata('front-end', 'read');
-        $this->data['beasiswa_post'] = $this->mposts->get_many(array('posts.post_type_id' => '11', 'nodes.status' => 'published'),
-            false, 'nodes.created', false, false, 4);
-        $this->data['informasi_post'] = $this->mposts->get_many(array('posts.post_type_id' => '7', 'nodes.status' => 'published'),
-            false, 'nodes.created', false, false, 3);
-        $this->data['event_post'] = $this->mposts->get_many(array('posts.post_type_id' => '3', 'nodes.status' => 'published'),
-            false, 'nodes.created', false, false, 3);
-        $this->data['news_post'] = $this->mposts->get_many(array('posts.post_type_id' => '2', 'nodes.status' => 'published'),
-            false, 'nodes.created', false, false, 3);
-        $this->data['content'] = $this->load->view('front/home', $this->data, true);
-        $this->load->view('front/template', $this->data);
-    }
-
-    public function trial(){
-        $this->_loaddata('front-end', 'read');
-        $this->load->view('front/trial', $this->data);
+        $this->load->view('front/home');
     }
 
     public function empty_func(){
